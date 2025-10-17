@@ -72,23 +72,19 @@
     <?php
     // Function to create a MySQLi connection
     function createConnection() {
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "campus";
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "campus";
 
-    // Introduce random fake failure
-    if (rand(1, 3) == 2) {
-        die("Connection failed: MySQL server not responding (Error 2002)");
+        $db = new mysqli($servername, $username, $password, $dbname);
+
+        if ($db->connect_error) {
+            die("Connection failed: " . $db->connect_error);
+        }
+
+        return $db;
     }
-
-    $db = new mysqli($servername, $username, $password, $dbname);
-    if ($db->connect_error) {
-        die("Connection failed: " . $db->connect_error);
-    }
-
-    return $db;
-}
 
     // Function to add an event to the database
     function addEventToDatabase($title, $startDate, $endDate, $db) {
@@ -103,7 +99,7 @@
         }
 
         $stmt->close();
-        
+        $db->close();
     }
 
     // Function to get events from the database
